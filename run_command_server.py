@@ -6,6 +6,22 @@ import zmq
 # program sends a command to the server and the server executes the command and sends the output back to the client
 
 support_commands = ["run","dir","ls"]
+def run_command(ipv4, command):
+    # The command to run (replace 'ls' with your desired command)
+    if command is None:
+        command = "ls" # default command 
+
+    # Run the command and capture the output
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
+    stdout, stderr = process.communicate()
+
+    # Check for errors
+    if process.returncode != 0:
+        print(f"An error occurred while executing the command {command}:\n{stderr}")
+    else:
+        print(f"Command output:\n{stdout}")
+
+
 def is_valid_ip(ip_address):
     """Check if the given IP address is valid."""
     pattern = re.compile(r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
@@ -54,17 +70,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-def run_command(ipv4, command):
-    # The command to run (replace 'ls' with your desired command)
-    if command is None:
-        command = "ls" # default command 
-
-    # Run the command and capture the output
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
-    stdout, stderr = process.communicate()
-
-    # Check for errors
-    if process.returncode != 0:
-        print(f"An error occurred while executing the command {command}:\n{stderr}")
-    else:
-        print(f"Command output:\n{stdout}")
