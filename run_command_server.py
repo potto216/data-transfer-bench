@@ -33,7 +33,7 @@ def main():
     # Socket to talk to server
     connection_url = f"tcp://{ip_address}:{port_number}"
     print(f"Waiting for command on {connection_url}…")
-    context = zmq.Context()
+    context = zmq.Context()   
     socket = context.socket(zmq.REP)
     socket.bind(connection_url)
 

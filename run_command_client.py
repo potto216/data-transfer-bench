@@ -1,6 +1,7 @@
 import subprocess
 import argparse
 import re
+import zmq
 
 # program sends a command to the server and the server executes the command and sends the output back to the client
 

@@ -3,7 +3,6 @@
 #   Binds REP socket to tcp://*:5555
 #   Expects b"Hello" from client, replies with b"World"
 #
-
 import time
 import zmq
 import sys
@@ -42,10 +41,11 @@ context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind(connection_url)
 
+print(f"Waiting on {connection_url}")
 while True:
     #  Wait for next request from client
     message = socket.recv()
-    print("Received request: %s" % message)
+    print(f"Received request: {message}")
 
     #  Do some 'work'
     time.sleep(1)
