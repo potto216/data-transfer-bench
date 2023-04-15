@@ -5,7 +5,7 @@ import zmq
 
 # program sends a command to the server and the server executes the command and sends the output back to the client
 
-support_commands = ["run"]
+support_commands = ["run","dir","ls"]
 def is_valid_ip(ip_address):
     """Check if the given IP address is valid."""
     pattern = re.compile(r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')

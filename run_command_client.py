@@ -19,7 +19,7 @@ def main():
     parser = argparse.ArgumentParser(description="A simple program to validate IPv4 address and command")
     
     parser.add_argument("ipv4", type=valid_ipv4, help="IPv4 address")
-    parser.add_argument("command", choices=["run","ls"], help="Command to execute")
+    parser.add_argument("command", choices=["run","ls","dir"], help="Command to execute")
     parser.add_argument("--port", "-p", type=int, default=5555, help="TCP/UDP port number (default: 5555)")
 
     args = parser.parse_args()
