@@ -2,10 +2,11 @@ import subprocess
 import argparse
 import re
 import zmq
+import time
 
 # program sends a command to the server and the server executes the command and sends the output back to the client
 
-support_commands = ["run","dir","ls"]
+support_process_commands = ["dir","ls"]
 def run_command(ipv4, command):
     # The command to run (replace 'ls' with your desired command)
     if command is None:
@@ -44,7 +45,7 @@ def main():
 
     
     print(f"Validated input: IP address = {ip_address}, port = {port_number}")
-    print(f"The supported commands are {support_commands}")
+    print(f"The supported process commands are {support_process_commands}")
     
     # Socket to talk to server
     connection_url = f"tcp://{ip_address}:{port_number}"
@@ -53,18 +54,34 @@ def main():
     socket = context.socket(zmq.REP)
     socket.bind(connection_url)
 
-    #  Wait for next request from client
-    message = socket.recv()
-    print(f"Received message {message}")
-    
-    command = message.decode("utf-8")
-    # test if message is a valid command
-    if command in support_commands:
-        run_command(ip_address, command)
-    else:
-        print(f"Invalid command of {command}")
-    
-    print("Exiting…")
+    exit_program = False
+    while not exit_program:
+            
+        #  Wait for next request from client
+        command = socket.recv_string()
+        print(f"Received message {command}")
+        
+        
+        # test if message is a valid command
+        if command in support_process_commands:
+            run_command(command)
+        elif command == "run_counter":
+            for ii in range(0,10):
+                print(f"Counter value: {ii}")
+                time.sleep(1)        
+            print("Counter complete")
+            socket.send_string(f"Processed {command}")
+        elif command == "exit":
+            exit_program = True
+            print("Exiting…")
+            socket.send_string(f"Processed {command}. Exiting.")
+        else:
+            print(f"Invalid command of {command}")
+            socket.send_string(f"Invalid command: {command}")
+
+    socket.close()
+    context.term()            
+
 
 
 if __name__ == "__main__":
